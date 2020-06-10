@@ -1,0 +1,10 @@
+package com.example.demo
+
+class RowAutomata(water_prob: Float, max_prob: Float, min_prob: Float, square_size: Int): RowByRow() {
+
+    private val automata: AutomataCore = AutomataCore(water_prob, max_prob, min_prob, square_size)
+
+    override fun function(map: World_Map, row: Int, column: Int) {
+       automata.changeTile(map, row, column)
+    }
+}
