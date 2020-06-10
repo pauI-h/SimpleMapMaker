@@ -265,5 +265,4 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
         is_running = false
         super.interrupt()
     }
-
 }

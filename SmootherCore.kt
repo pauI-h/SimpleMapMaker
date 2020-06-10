@@ -17,7 +17,7 @@ open class SmootherCore(var square_size: Int, var threaded: Boolean) {
         }
 
         //Check for lake
-        val target = ((tiles.size+1)/2).pow(2) //Maybe change this back to size/2 ^ 2
+        val target = ((tiles.size)/2).pow(2) //Maybe change this back to size/2 ^ 2
         val square_width = (tiles.size)/2
         for (row in 0..tiles.size/2){
             for (column in 0..tiles.size/2){
@@ -29,41 +29,41 @@ open class SmootherCore(var square_size: Int, var threaded: Boolean) {
             }
         }
 
-        for (row in 0 until tiles.size){ //Removes options that cannot be rivers
-            if (tiles.countTilesInArea(Water(), row, row, 0, tiles.size-1) < 3){
-                return Earth()
-            }
-        }
-
-        //Check for river
-        val threads = arrayOf(RiverChecker(true, tiles, threaded),
-                RiverChecker(false, tiles, threaded))
-
-        for (thread in threads){
-            thread.start()
-        }
-
-        var done = false
-        while(!done){
-            done = true
-            for (thread in threads){
-                if (!thread.is_finished){
-                    done = false
-                }
-                if (thread.is_finished && !thread.is_river){
-                    break;
-                }
-            }
-            yield()
-        }
-
-        for (thread in threads){
-            thread.interrupt()
-        }
-
-        if (threads[0].is_river && threads[1].is_river){
-            return Water()
-        }
+//        for (row in 0 until tiles.size){ //Removes options that cannot be rivers
+//            if (tiles.countTilesInArea(Water(), row, row, 0, tiles.size-1) < 3){
+//                return Earth()
+//            }
+//        }
+//
+//        //Check for river
+//        val threads = arrayOf(RiverChecker(true, tiles, threaded),
+//                RiverChecker(false, tiles, threaded))
+//
+//        for (thread in threads){
+//            thread.start()
+//        }
+//
+//        var done = false
+//        while(!done){
+//            done = true
+//            for (thread in threads){
+//                if (!thread.is_finished){
+//                    done = false
+//                }
+//                if (thread.is_finished && !thread.is_river){
+//                    break;
+//                }
+//            }
+//            yield()
+//        }
+//
+//        for (thread in threads){
+//            thread.interrupt()
+//        }
+//
+//        if (threads[0].is_river && threads[1].is_river){
+//            return Water()
+//        }
 
         return Earth()
     }
