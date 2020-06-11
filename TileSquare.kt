@@ -14,7 +14,7 @@ class TileSquare(map: World_Map, center: Array<Int>, val size: Int) {
 
         content = Array(size){
             val row = it;
-            return@Array Array(size){map.getTile(row, it).copy()}
+            return@Array Array(size){map.getTile(row+(center[0]/2), it+(center[1]/2)).copy()}
         }
     }
 
@@ -27,7 +27,7 @@ class TileSquare(map: World_Map, center: Array<Int>, val size: Int) {
     }
 
     fun getTile(row: Int, column: Int): Tile{
-        return content[row][column]
+        return content[row][column].copy()
     }
 
     fun countTilesInArea(tile: Tile, min_row: Int, max_row: Int, min_column: Int, max_column: Int): Int{
@@ -52,6 +52,9 @@ class TileSquare(map: World_Map, center: Array<Int>, val size: Int) {
         for (row in min_row..max_row){
             for (column in min_column..max_column){
                 if (tile::class == getTile(row, column)::class){
+                    if (tile is Water && getTile(row, column) !is Water){
+                        throw IllegalArgumentException("Is counting not water as water")
+                    }
                     num++
                 }
             }
@@ -70,5 +73,16 @@ class TileSquare(map: World_Map, center: Array<Int>, val size: Int) {
 
     fun setCenterTile(tile: Tile){
         setTile(size/2,size/2, tile)
+    }
+
+    override fun toString(): String {
+        var temp = ""
+        for (row in 0 until size){
+            for (column in 0 until size){
+                temp+=content[row][column].toString()
+            }
+            temp+="\n"
+        }
+        return temp
     }
 }
