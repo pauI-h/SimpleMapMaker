@@ -10,7 +10,9 @@ class Main {
         @JvmStatic
         fun main(args: Array<String>) {
             val temp = Code()
-            temp.run(1000,1000,0.8F,0.5F, 0.9F, 0.2F)
+            val start = System.currentTimeMillis()
+            temp.run(256,256,0.8F,0.5F, 0.9F, 0.2F)
+            println(System.currentTimeMillis()-start)
         }
     }
 }
@@ -18,7 +20,7 @@ class Main {
 class Code(){
 
     private var smoother = SpiralSmoother(11, true)
-    private val smoother_delay = 1.5
+    private val smoother_delay = 0.8
     private lateinit var automata: RowAutomata;
     private lateinit var clumper: SpiralClumper;
 
@@ -30,7 +32,6 @@ class Code(){
                 map.HEIGHT/2, map.WIDTH/2, (PI/3F).toFloat()));
 
         //Speed testing stuff hidden here
-
         {
 //            var norm_start = System.currentTimeMillis()
 //            println("Normal automata start")
@@ -56,6 +57,12 @@ class Code(){
 //
 //            exitProcess(-2)
         }
+
+        val tileSquare = TileSquare(map, arrayOf(10,10), 11)
+        val start = System.currentTimeMillis()
+        tileSquare.countTile(Water())
+        println("Time: ${System.currentTimeMillis()-start}")
+
 
         seeder(map, water_start_prob, max_prob)
         clumper.water_prob = water_prob
@@ -83,7 +90,7 @@ class Code(){
         clumpThenRun(map, 3, 8, 3)
 
         clumper.setWaterProb(min_prob)
-        clumper.applyNRounds(map, 2)
+        clumper.applyNRoundsConcurrently(map, 2, 0.5)
 
         clumper.setWaterProb(1F)
         clumper.applyNRounds(map, 1)
@@ -95,10 +102,10 @@ class Code(){
         automata.applyOnce(map)
 
         clumper.setWaterProb(water_prob)
-        clumper.applyNRounds(map, 2)
+        clumper.applyNRoundsConcurrently(map, 2, 0.5)
 
         clumper.setWaterProb(1F)
-        clumper.applyNRounds(map, 1)
+        clumper.applyNRoundsConcurrently(map, 1, 0.5)
 
         File("Map2.txt").writeText(map.toString())
 

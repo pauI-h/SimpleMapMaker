@@ -37,35 +37,35 @@ open class SmootherCore(var square_size: Int, var threaded: Boolean) {
         }
 
         //Check for river
-        val threads = arrayOf(RiverChecker(true, tiles, threaded),
-                RiverChecker(false, tiles, threaded))
-
-        for (thread in threads){
-            thread.start()
-        }
-
-        var done = false
-        while(!done){
-            done = true
-            for (thread in threads){
-                if (!thread.is_finished){
-                    done = false
-                }
-                if (thread.is_finished && !thread.is_river){
-                    break;
-                }
-            }
-            yield()
-        }
-
-        for (thread in threads){
-            thread.interrupt()
-        }
-
-        if (threads[0].is_river && threads[1].is_river){
-            println("Is river")
-            return Water()
-        }
+//        val threads = arrayOf(RiverChecker(true, tiles, threaded),
+//                RiverChecker(false, tiles, threaded))
+//
+//        for (thread in threads){
+//            thread.start()
+//        }
+//
+//        var done = false
+//        while(!done){
+//            done = true
+//            for (thread in threads){
+//                if (!thread.is_finished){
+//                    done = false
+//                }
+//                if (thread.is_finished && !thread.is_river){
+//                    break;
+//                }
+//            }
+//            yield()
+//        }
+//
+//        for (thread in threads){
+//            thread.interrupt()
+//        }
+//
+//        if (threads[0].is_river && threads[1].is_river){
+//            println("Is river")
+//            return Water()
+//        }
 
         return Earth()
     }

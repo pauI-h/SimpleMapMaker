@@ -1,16 +1,16 @@
 package com.example.demo
 
 abstract class SpiralMovement {
-    var current_tiles = 0
-    var moved_current_dir = 0
-    var current_row_change = 0
-    var current_column_change = 1
-    var to_move_current_dir = 1
-    var num_current_to_move = 0
 
     open fun applyOnce(map: World_Map){
         var row = map.HEIGHT/2
         var column = map.WIDTH/2
+        var current_tiles = 0
+        var moved_current_dir = 0
+        var current_row_change = 0
+        var current_column_change = 1
+        var to_move_current_dir = 1
+        var num_current_to_move = 0
 
 
         while (row<map.HEIGHT || column<map.WIDTH){
@@ -58,7 +58,7 @@ abstract class SpiralMovement {
 
         for (thread in threads){
             thread.start()
-            Thread.sleep(((12.pow(2).toDouble())*wait).toLong())
+            Thread.sleep((((map.HEIGHT*map.WIDTH)-((map.HEIGHT-7)*(map.WIDTH-7))).toDouble()*wait).toLong())
         }
 
         while (threads[rounds-1].isAlive){
