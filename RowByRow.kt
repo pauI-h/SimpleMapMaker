@@ -31,6 +31,10 @@ abstract class RowByRow {
             Thread.sleep(10)
             yield()
         }
+
+        for (thread in threads){
+            thread.interrupt()
+        }
     }
 
     abstract fun function(map: World_Map, row: Int, column: Int)

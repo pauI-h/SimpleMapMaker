@@ -15,7 +15,7 @@ open class AutomataCore(var water_prob: Float, var max_prob: Float, var min_prob
         map.setTile(row, column, automata(square, prob, max_prob, min_prob))
     }
 
-    fun automata(tiles: TileSquare, water_prob: Float, max_prob: Float, min_prob: Float): Tile { //Takes aprox 40 ms
+    fun automata(tiles: TileSquare, water_prob: Float, max_prob: Float, min_prob: Float): Tile {
 
         val start_time = System.currentTimeMillis()
 
@@ -47,7 +47,7 @@ open class AutomataCore(var water_prob: Float, var max_prob: Float, var min_prob
         }
 
         if (min_prob>water_prob){
-            throw IllegalArgumentException("min_prob must be less than or equal to than water_prob")
+            throw IllegalArgumentException("min_prob must be less than or equal to water_prob")
         }
 
         if (min_prob<0){

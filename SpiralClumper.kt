@@ -12,7 +12,7 @@ class SpiralClumper(var water_prob: Float,
         super.applyOnce(map)
     }
 
-    override fun function(map: World_Map) {
+    override fun function(map: World_Map, row: Int, column: Int) {
         clumperCore.clumper(map, row, column)
     }
 

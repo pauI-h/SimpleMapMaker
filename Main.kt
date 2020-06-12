@@ -10,7 +10,7 @@ class Main {
         @JvmStatic
         fun main(args: Array<String>) {
             val temp = Code()
-            temp.run(125,125,0.8F,0.5F, 0.9F, 0.2F)
+            temp.run(1000,1000,0.8F,0.5F, 0.9F, 0.2F)
         }
     }
 }
@@ -18,6 +18,7 @@ class Main {
 class Code(){
 
     private var smoother = SpiralSmoother(11, true)
+    private val smoother_delay = 1.5
     private lateinit var automata: RowAutomata;
     private lateinit var clumper: SpiralClumper;
 
@@ -71,7 +72,7 @@ class Code(){
 
         spiral_automata.applyNRounds(map, 4)
 
-        smoother.applyNRounds(map, 3)
+        smoother.applyNRoundsConcurrently(map, 3, smoother_delay)
 
         val water_ring = SpiralClumper(1F, Ellipse(map.HEIGHT/2, map.WIDTH/2,
                 map.HEIGHT/2, map.WIDTH/2, 0F))
@@ -87,9 +88,9 @@ class Code(){
         clumper.setWaterProb(1F)
         clumper.applyNRounds(map, 1)
 
-        smoother.applyNRounds(map, 3)
+        smoother.applyNRoundsConcurrently(map, 3, smoother_delay)
 
-        File("Map1.txt").writeText(map.toString())
+//        File("Map1.txt").writeText(map.toString())
 
         automata.applyOnce(map)
 
@@ -101,9 +102,9 @@ class Code(){
 
         File("Map2.txt").writeText(map.toString())
 
-        smoother.applyNRounds(map, 2)
+        smoother.applyNRoundsConcurrently(map, 2, smoother_delay)
 
-        File("Map3.txt").writeText(map.toString())
+        File("Map.txt").writeText(map.toString())
     }
 
     private fun seeder(map: World_Map, water_prob: Float, max_prob: Float){
@@ -121,7 +122,7 @@ class Code(){
 
     private fun automataThenSmooth(map: World_Map, automata_rounds: Int, smoother_rounds: Int){
         automata.applyNRoundsConcurrently(map, automata_rounds, 0.05)
-        smoother.applyNRounds(map, smoother_rounds)
+        smoother.applyNRoundsConcurrently(map, smoother_rounds, smoother_delay)
     }
 
     private fun clumpThenRun(map: World_Map, clumper_rounds: Int, automata_rounds: Int, smoother_rounds: Int){

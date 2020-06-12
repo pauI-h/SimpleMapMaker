@@ -1,13 +1,7 @@
 package com.example.demo
 
-import kotlin.math.pow
-import kotlin.math.sqrt
-import kotlin.system.exitProcess
-
 abstract class SpiralMovement {
     var current_tiles = 0
-    var row: Int = 0
-    var column: Int = 0
     var moved_current_dir = 0
     var current_row_change = 0
     var current_column_change = 1
@@ -15,15 +9,15 @@ abstract class SpiralMovement {
     var num_current_to_move = 0
 
     open fun applyOnce(map: World_Map){
-        row = map.HEIGHT/2
-        column = map.WIDTH/2
+        var row = map.HEIGHT/2
+        var column = map.WIDTH/2
 
 
         while (row<map.HEIGHT || column<map.WIDTH){
             if ((row<map.HEIGHT && row>-1) && (column<map.WIDTH && column>-1)) {
                 current_tiles++;
 
-                function(map)
+                function(map, row, column)
             }
 
             row += current_row_change
@@ -59,5 +53,23 @@ abstract class SpiralMovement {
         }
     }
 
-    abstract fun function(map: World_Map)
+    open fun applyNRoundsConcurrently(map: World_Map, rounds: Int, wait: Double){
+        val threads = Array(rounds){Thread{applyOnce(map)}}
+
+        for (thread in threads){
+            thread.start()
+            Thread.sleep(((12.pow(2).toDouble())*wait).toLong())
+        }
+
+        while (threads[rounds-1].isAlive){
+            Thread.sleep(10)
+            Thread.yield()
+        }
+
+        for (thread in threads){
+            thread.interrupt()
+        }
+    }
+
+    abstract fun function(map: World_Map, row: Int, column: Int)
 }

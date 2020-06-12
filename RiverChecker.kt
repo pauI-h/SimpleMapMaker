@@ -233,7 +233,7 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
         return true
     }
 
-    fun getColumnList(tiles: TileSquare, row: Int, column: Int): MutableList<Int>{
+    private fun getColumnList(tiles: TileSquare, row: Int, column: Int): MutableList<Int>{
         val columns: MutableList<Int> = MutableList(0) {it} //Blank list of Ints
 
         try {
@@ -265,5 +265,4 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
         is_running = false
         super.interrupt()
     }
-
 }

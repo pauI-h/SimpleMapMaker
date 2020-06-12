@@ -10,6 +10,7 @@ open class SmootherCore(var square_size: Int, var threaded: Boolean) {
     }
 
     private fun smoother(tiles: TileSquare): Tile{
+
         tiles.setCenterTile(Water())
 
         if (tiles.countTile(Water())<min(3*tiles.size, tiles.area/4)){ //n^2
@@ -17,7 +18,7 @@ open class SmootherCore(var square_size: Int, var threaded: Boolean) {
         }
 
         //Check for lake
-        val target = ((tiles.size+1)/2).pow(2) //Maybe change this back to size/2 ^ 2
+        val target = ((tiles.size)/2).pow(2) //Maybe change this back to size/2 ^ 2
         val square_width = (tiles.size)/2
         for (row in 0..tiles.size/2){
             for (column in 0..tiles.size/2){
@@ -62,6 +63,7 @@ open class SmootherCore(var square_size: Int, var threaded: Boolean) {
         }
 
         if (threads[0].is_river && threads[1].is_river){
+            println("Is river")
             return Water()
         }
 

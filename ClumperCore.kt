@@ -6,7 +6,7 @@ import kotlin.math.sqrt
 
 open class ClumperCore(var water_prob: Float, var shape:Ellipse) {
     private val random = Random()
-    var change_prob = 0.9F
+    var change_prob = 1F
     var water_count = 0
     var current_tiles = 0
 
