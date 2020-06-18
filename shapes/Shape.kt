@@ -1,4 +1,4 @@
-package com.example.demo
+package shapes
 
 interface Shape {
     fun containsPoint(x: Int, y: Int): Boolean
