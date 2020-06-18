@@ -1,4 +1,4 @@
-package com.example.demo
+package tiles
 
 interface Tile {
     val name: String;
