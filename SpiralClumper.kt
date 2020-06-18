@@ -8,13 +8,13 @@ class SpiralClumper(var water_prob: Float,
 
     val clumperCore = ClumperCore(water_prob, shape)
 
-    override fun applyOnce(map: World_Map){
+    override fun applyOnce(map: WorldMap){
         clumperCore.water_count = 0
         clumperCore.current_tiles = 0
         super.applyOnce(map)
     }
 
-    override fun function(map: World_Map, row: Int, column: Int) {
+    override fun function(map: WorldMap, row: Int, column: Int) {
         clumperCore.clumper(map, row, column)
     }
 

@@ -23,7 +23,7 @@ class WorldMap(height: Int, width: Int, start_water_percentage: Float) {
         loadFromFile(file, tile_list)
     }
 
-    constructor(map: World_Map, min_row: Int, max_row: Int, min_column: Int, max_column: Int):
+    constructor(map: WorldMap, min_row: Int, max_row: Int, min_column: Int, max_column: Int):
             this(1+max_row-min_row, 1+max_column-min_column, 0F){
 
         for (row in min_row..max_row){
@@ -33,7 +33,7 @@ class WorldMap(height: Int, width: Int, start_water_percentage: Float) {
         }
     }
 
-    constructor(map: World_Map, center: Array<Int>, size: Int): this(size, size, 0F){
+    constructor(map: WorldMap, center: Array<Int>, size: Int): this(size, size, 0F){
         if (center.size != 2){
             throw IllegalArgumentException("Center was expected to have size 2 not ${center.size}")
         }
@@ -117,11 +117,11 @@ class WorldMap(height: Int, width: Int, start_water_percentage: Float) {
         }
     }
 
-    fun add(other: World_Map): World_Map {
+    fun add(other: WorldMap): WorldMap {
         if (other.WIDTH != this.WIDTH || other.HEIGHT!=this.HEIGHT){
             throw IllegalArgumentException("Both maps must have the same dimensions")
         }
-        val new_map = World_Map(HEIGHT, WIDTH, 0F)
+        val new_map = WorldMap(HEIGHT, WIDTH, 0F)
         for (row in 0 until HEIGHT){
             for (column in 0 until HEIGHT){
                 new_map.setTile(row, column, addTiles(this.getTile(row, column), other.getTile(row, column)))
@@ -213,7 +213,7 @@ class WorldMap(height: Int, width: Int, start_water_percentage: Float) {
     }
 
     private class CounterThread(val tile: Tile, val row: Int, val min_column: Int, val max_column: Int,
-                                val tiles: World_Map): Thread(){
+                                val tiles: WorldMap): Thread(){
         var count = 0
         var finished = false
 

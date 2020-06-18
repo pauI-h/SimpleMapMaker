@@ -3,7 +3,6 @@ package map_tidying
 import WorldMap
 import movement.Applyable
 import tiles.Tile
-import tornadofx.*
 
 class Tidyier(val tile_from: Tile, val tile_to: Tile): Applyable {
 
@@ -18,7 +17,6 @@ class Tidyier(val tile_from: Tile, val tile_to: Tile): Applyable {
     }
 
     override fun applyNRoundsConcurrently(map: WorldMap, rounds: Int, wait: Double) {
-        warning("This does not save time compared to applyNRounds")
         applyNRounds(map, rounds)
     }
 

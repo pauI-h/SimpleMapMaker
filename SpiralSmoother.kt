@@ -5,7 +5,7 @@ class SpiralSmoother(square_size: Int, private var threaded: Boolean): SpiralMov
 
     private val smoother = SmootherCore(square_size, threaded)
 
-    override fun function(map: World_Map, row: Int, column: Int) {
+    override fun function(map: WorldMap, row: Int, column: Int) {
         smoother.changeTile(map, row, column)
     }
 

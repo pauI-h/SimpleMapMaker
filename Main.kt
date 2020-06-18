@@ -35,7 +35,7 @@ class Code(){
     private var automata_count = 0
 
     fun run(height: Int, width: Int, water_start_prob: Float, water_prob: Float, max_prob: Float, min_prob: Float) {
-        var map = World_Map(height, width, water_start_prob)
+        var map = WorldMap(height, width, water_start_prob)
         automata = RowAutomata(water_prob, max_prob, min_prob, 11)
         val spiral_automata = SpiralAutomata(water_prob, max_prob, min_prob, 7)
         clumper = SpiralClumper(water_prob * 1.2F, Ellipse(map.HEIGHT / 3, map.WIDTH / 4,
@@ -74,7 +74,7 @@ class Code(){
 //        map.toFile(File("Map.txt"))
 //        return
 
-        val tileSquare = World_Map(map, arrayOf(10, 10), 11)
+        val tileSquare = WorldMap(map, arrayOf(10, 10), 11)
         val start = System.currentTimeMillis()
         tileSquare.countTile(Water())
         println("Time: ${System.currentTimeMillis()-start}")
@@ -132,7 +132,7 @@ class Code(){
         println(smoother_time/smoother_count)
     }
 
-    private fun seeder(map: World_Map, water_prob: Float, max_prob: Float){
+    private fun seeder(map: WorldMap, water_prob: Float, max_prob: Float){
         for (row in arrayOf(0, map.HEIGHT)){
             for (column in arrayOf(0, map.WIDTH)){
                 clumper.water_prob = water_prob
@@ -145,7 +145,7 @@ class Code(){
 
     }
 
-    private fun automataThenSmooth(map: World_Map, automata_rounds: Int, smoother_rounds: Int){
+    private fun automataThenSmooth(map: WorldMap, automata_rounds: Int, smoother_rounds: Int){
         var start = System.currentTimeMillis()
         automata.applyNRoundsConcurrently(map, automata_rounds, 0.05)
         var finish = System.currentTimeMillis()
@@ -158,7 +158,7 @@ class Code(){
         smoother_count += smoother_rounds
     }
 
-    private fun clumpThenRun(map: World_Map, clumper_rounds: Int, automata_rounds: Int, smoother_rounds: Int){
+    private fun clumpThenRun(map: WorldMap, clumper_rounds: Int, automata_rounds: Int, smoother_rounds: Int){
         clumper.applyNRounds(map, clumper_rounds)
         automataThenSmooth(map, automata_rounds, smoother_rounds)
     }
