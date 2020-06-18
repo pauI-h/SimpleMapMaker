@@ -1,4 +1,5 @@
-package com.example.demo
+import movement.SpiralMovement
+import processing_cores.SmootherCore
 
 class SpiralSmoother(square_size: Int, private var threaded: Boolean): SpiralMovement() {
 

@@ -1,4 +1,5 @@
-package com.example.demo
+import movement.SpiralMovement
+import processing_cores.AutomataCore
 
 class SpiralAutomata(var water_prob: Float, var max_prob: Float, var min_prob: Float, var square_size: Int):
         SpiralMovement() {
