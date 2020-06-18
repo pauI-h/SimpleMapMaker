@@ -1,22 +1,23 @@
-package com.example.demo
+package processing_cores
 
+import WorldMap
+import tiles.Water
 import java.util.*
-import kotlin.concurrent.thread
 
 
-class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: Boolean = true): Thread() {
+class RiverChecker(var search_up: Boolean, var tiles: WorldMap, var threaded: Boolean = true): Thread() {
     var is_river = false;
     var is_finished = false;
     var is_running = false;
-    var tile_thread_map: MutableMap<Array<Int>, RiverChecker> = mutableMapOf()
+    var tile_thread_map: MutableMap<List<Int>, RiverChecker> = mutableMapOf()
     var is_interupted = false;
 
-    var row = tiles.size/2
-    var column = tiles.size/2
+    var row = tiles.getArea()/2
+    var column = tiles.getArea()/2
 
 
-    private constructor(search_up: Boolean, tiles: TileSquare, row: Int, column: Int,
-                        tile_thread_map: MutableMap<Array<Int>, RiverChecker>): this(search_up, tiles){
+    private constructor(search_up: Boolean, tiles: WorldMap, row: Int, column: Int,
+                        tile_thread_map: MutableMap<List<Int>, RiverChecker>): this(search_up, tiles){
         this.search_up = search_up
         this.tiles = tiles
         this.row = row
@@ -43,7 +44,7 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
         is_finished = true
     }
 
-    private fun search(tiles: TileSquare, row: Int, column: Int, row_difference: Int): Boolean{
+    private fun search(tiles: WorldMap, row: Int, column: Int, row_difference: Int): Boolean{
         if (row_difference == 0){
             throw IllegalArgumentException("Row difference cannot be 0")
         }
@@ -53,7 +54,7 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
             return true
         }
 
-        if (row >= tiles.size && row_difference>0){
+        if (row >= tiles.getArea() && row_difference>0){
             return true
         }
 
@@ -74,10 +75,10 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
                         { RiverChecker(true, tiles, next_row, columns[it], tile_thread_map) }
 
             for (i in 0 until columns.size) { //Stops tiles being checked multiple times
-                if (tile_thread_map.containsKey(arrayOf(next_row, columns[i]))) {
-                    threads[i] = tile_thread_map[arrayOf(next_row, columns[i])]!!
+                if (tile_thread_map.containsKey(listOf(next_row, columns[i]))) {
+                    threads[i] = tile_thread_map[listOf(next_row, columns[i])]!!
                 } else {
-                    tile_thread_map[arrayOf(row + row_difference, columns[i])] = threads[i]
+                    tile_thread_map[listOf(row + row_difference, columns[i])] = threads[i]
                 }
             }
 
@@ -132,15 +133,15 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
 
     }
 
-    private fun searchUp(tiles: TileSquare, row: Int, column: Int): Boolean {
+    private fun searchUp(tiles: WorldMap, row: Int, column: Int): Boolean {
         return search(tiles, row, column, -1)
     }
 
-    private fun searchDown(tiles: TileSquare, row: Int, column: Int): Boolean {
+    private fun searchDown(tiles: WorldMap, row: Int, column: Int): Boolean {
         return search(tiles, row, column, +1)
     }
 
-    private fun searchUpStack(tiles: TileSquare, row: Int, column: Int): Boolean{
+    private fun searchUpStack(tiles: WorldMap, row: Int, column: Int): Boolean{
         if (row < 0){
             return true
         }
@@ -159,7 +160,7 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
 
         while (!stack.isEmpty()){
             val current_position = stack.pop()
-            if (current_position[0] >= tiles.size){
+            if (current_position[0] < 0){
                 return true
             }
 
@@ -178,8 +179,8 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
         return false
     }
 
-    private fun searchDownStack(tiles: TileSquare, row: Int, column: Int): Boolean {
-        if (row >= tiles.size){
+    private fun searchDownStack(tiles: WorldMap, row: Int, column: Int): Boolean {
+        if (row >= tiles.HEIGHT){
             return true
         }
 
@@ -197,7 +198,7 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
 
         while (!stack.isEmpty()){
             val current_position = stack.pop()
-            if (current_position[0] >= tiles.size){
+            if (current_position[0] >= tiles.HEIGHT){
                 return true
             }
 
@@ -216,7 +217,7 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
         return false
     }
 
-    private fun rowCheck(tiles: TileSquare, row: Int, column: Int): Boolean{
+    private fun rowCheck(tiles: WorldMap, row: Int, column: Int): Boolean{
         if (tiles.getTile(row, column)::class != Water()::class){
             return false
         }
@@ -226,14 +227,14 @@ class RiverChecker(var search_up: Boolean, var tiles: TileSquare, var threaded: 
         }
 
         if ((tiles.getTile(row, column-1)::class != Water()::class || column<1)&& //Checks left tile
-                (tiles.getTile(row, column+1)::class != Water()::class || column>tiles.size-1)){ //Checks right tile
+                (tiles.getTile(row, column+1)::class != Water()::class || column>tiles.WIDTH-1)){ //Checks right tile
             return false
         }
 
         return true
     }
 
-    private fun getColumnList(tiles: TileSquare, row: Int, column: Int): MutableList<Int>{
+    private fun getColumnList(tiles: WorldMap, row: Int, column: Int): MutableList<Int>{
         val columns: MutableList<Int> = MutableList(0) {it} //Blank list of Ints
 
         try {
