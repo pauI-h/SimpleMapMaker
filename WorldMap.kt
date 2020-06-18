@@ -4,7 +4,7 @@ import tiles.Water
 import java.io.File
 import java.util.*
 
-class World_Map(height: Int, width: Int, start_water_percentage: Float) {
+class WorldMap(height: Int, width: Int, start_water_percentage: Float) {
     private val random = Random()
     private var map: Array<Array<Tile>> = Array(height) {Array(width) {
         if(random.nextFloat()>start_water_percentage){
