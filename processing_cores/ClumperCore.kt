@@ -1,16 +1,18 @@
-package com.example.demo
+package processing_cores
 
+import WorldMap
+import shapes.Ellipse
+import tiles.Earth
+import tiles.Water
 import java.util.*
-import kotlin.math.pow
-import kotlin.math.sqrt
 
-open class ClumperCore(var water_prob: Float, var shape:Ellipse) {
+open class ClumperCore(var water_prob: Float, var shape: Ellipse) {
     private val random = Random()
-    var change_prob = 1F
+    var change_prob = 0.9F
     var water_count = 0
     var current_tiles = 0
 
-    fun clumper(map: World_Map, row: Int, column: Int){
+    fun clumper(map: WorldMap, row: Int, column: Int){
         if (row !in 0 until map.HEIGHT || column !in 0 until map.WIDTH){
             return;
         }
@@ -31,7 +33,7 @@ open class ClumperCore(var water_prob: Float, var shape:Ellipse) {
                     water_count--
                 }
             } else if (!shape.containsPoint(column, row)
-                    && water_count < predicted_water
+                    && water_count <= predicted_water
                     && random.nextFloat()<change_prob) {
                 map.setTile(row, column, Water())
                 if (!tile_is_water) {

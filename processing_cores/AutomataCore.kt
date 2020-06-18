@@ -1,5 +1,9 @@
-package com.example.demo
+package processing_cores
 
+import WorldMap
+import tiles.Earth
+import tiles.Tile
+import tiles.Water
 import java.lang.NumberFormatException
 import java.util.*
 import kotlin.math.max
@@ -9,17 +13,17 @@ import kotlin.math.pow
 open class AutomataCore(var water_prob: Float, var max_prob: Float, var min_prob: Float, private var square_size: Int) {
     private val random = Random()
 
-    open fun changeTile(map: World_Map, row: Int, column: Int){
+    open fun changeTile(map: WorldMap, row: Int, column: Int){
         val prob: Float = water_prob
-        val square = TileSquare(map, arrayOf(row, column), square_size)
+        val square = WorldMap(map, arrayOf(row, column), square_size)
         map.setTile(row, column, automata(square, prob, max_prob, min_prob))
     }
 
-    fun automata(tiles: TileSquare, water_prob: Float, max_prob: Float, min_prob: Float): Tile {
+    fun automata(tiles: WorldMap, water_prob: Float, max_prob: Float, min_prob: Float): Tile {
 
         val start_time = System.currentTimeMillis()
 
-        val num_tiles = tiles.size.pow(2)
+        val num_tiles = tiles.getArea()
 
         val water_count = tiles.countTile(Water())
 

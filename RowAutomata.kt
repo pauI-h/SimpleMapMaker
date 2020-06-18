@@ -1,4 +1,5 @@
-package com.example.demo
+import movement.RowByRow
+import processing_cores.AutomataCore
 
 class RowAutomata(water_prob: Float, max_prob: Float, min_prob: Float, square_size: Int): RowByRow() {
 

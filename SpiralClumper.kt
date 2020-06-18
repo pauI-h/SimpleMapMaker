@@ -1,4 +1,6 @@
-package com.example.demo
+import movement.SpiralMovement
+import processing_cores.ClumperCore
+import shapes.Ellipse
 
 class SpiralClumper(var water_prob: Float,
                     shape: Ellipse):
