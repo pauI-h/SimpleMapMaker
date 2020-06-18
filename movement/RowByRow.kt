@@ -1,11 +1,11 @@
-package com.example.demo
+package movement
 
+import WorldMap
 import java.lang.Thread.yield
-import kotlin.concurrent.thread
 
-abstract class RowByRow {
+abstract class RowByRow: Applyable {
 
-    fun applyOnce(map: World_Map){
+    override fun applyOnce(map: WorldMap){
         for (row in 0 until map.HEIGHT){
             for (column in 0 until map.WIDTH){
                 function(map, row, column)
@@ -13,13 +13,10 @@ abstract class RowByRow {
         }
     }
 
-    fun applyNRounds(map: World_Map, rounds: Int){
-        for (i in 0 until rounds){
-            applyOnce(map)
+    override fun applyNRoundsConcurrently(map: WorldMap, rounds: Int, wait: Double){
+        if (rounds == 0){
+            return
         }
-    }
-
-    fun applyNRoundsConcurrently(map: World_Map, rounds: Int, wait: Double){
         val threads = Array(rounds){Thread{applyOnce(map)}}
 
         for (thread in threads){
@@ -37,5 +34,5 @@ abstract class RowByRow {
         }
     }
 
-    abstract fun function(map: World_Map, row: Int, column: Int)
+    abstract fun function(map: WorldMap, row: Int, column: Int)
 }

@@ -1,8 +1,10 @@
-package com.example.demo
+package movement
+
+import WorldMap
 
 abstract class SpiralMovement {
 
-    open fun applyOnce(map: World_Map){
+    open fun applyOnce(map: WorldMap){
         var row = map.HEIGHT/2
         var column = map.WIDTH/2
         var current_tiles = 0
@@ -47,13 +49,17 @@ abstract class SpiralMovement {
         num_current_to_move = 0
     }
 
-    open fun applyNRounds(map: World_Map, rounds: Int){
+    open fun applyNRounds(map: WorldMap, rounds: Int){
         for (i in 0 until rounds){
             applyOnce(map)
         }
     }
 
-    open fun applyNRoundsConcurrently(map: World_Map, rounds: Int, wait: Double){
+    open fun applyNRoundsConcurrently(map: WorldMap, rounds: Int, wait: Double){
+        if (rounds == 0){
+            return
+        }
+
         val threads = Array(rounds){Thread{applyOnce(map)}}
 
         for (thread in threads){
@@ -71,5 +77,5 @@ abstract class SpiralMovement {
         }
     }
 
-    abstract fun function(map: World_Map, row: Int, column: Int)
+    abstract fun function(map: WorldMap, row: Int, column: Int)
 }
