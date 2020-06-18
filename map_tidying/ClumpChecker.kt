@@ -9,10 +9,20 @@ class ClumpChecker (val map: WorldMap, val tile: Tile) {
     private var lake_map: MutableMap<List<Int>, Boolean> = mutableMapOf()
     private var being_checked: MutableList<List<Int>> = mutableListOf()
     private var allow_edges: Boolean = false
+    private var square_size: Int = 5
 
     constructor(map: WorldMap, tile: Tile, allow_edges: Boolean): this(map, tile){
         this.allow_edges = allow_edges
     }
+
+    constructor(map: WorldMap, tile: Tile, square_size: Int): this(map, tile){
+        this.square_size = square_size
+    }
+
+    constructor(map: WorldMap, tile: Tile, allow_edges: Boolean, square_size: Int): this(map, tile, allow_edges){
+        this.square_size = square_size
+    }
+
 
     fun isTileLake(row: Int, column: Int): Boolean{
         val temp = listOf(row, column)
@@ -31,7 +41,7 @@ class ClumpChecker (val map: WorldMap, val tile: Tile) {
             return false
         }
 
-        val square = WorldMap(map, arrayOf(row, column), 5)
+        val square = WorldMap(map, arrayOf(row, column), square_size)
 
         if (square.countTile(tile) == square.getArea()){
             setTileLake(row, column)
