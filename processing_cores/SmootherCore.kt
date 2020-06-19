@@ -21,10 +21,11 @@ open class SmootherCore(var square_size: Int, var threaded: Boolean) {
         }
 
         val target = ((tiles.getArea())/2).pow(2) //Maybe change this back to size/2 ^ 2
-        val square_width = (tiles.getArea())/2
-        for (row in 0..tiles.getArea()/2) {
-            for (column in 0..tiles.getArea() / 2) {
-                if (tiles.countTilesInArea(Water(), row, row + square_width, column,
+        val square_width = (tiles.WIDTH)/2
+        val square_height = tiles.HEIGHT/2
+        for (row in 0..tiles.HEIGHT/2) {
+            for (column in 0..tiles.WIDTH/2) {
+                if (tiles.countTilesInArea(Water(), row, row + square_height, column,
                                 column + square_width)
                         == target) {
                     return Water()

@@ -152,12 +152,15 @@ class WorldMap(height: Int, width: Int, start_water_percentage: Float) {
         }
 
         if (min_row<0 || min_column<0){
-            throw IllegalArgumentException("minimum value must not be less that 0")
+            throw IllegalArgumentException("Minimum value must not be less that 0")
         }
 
-        if (max_row>=HEIGHT || max_column>=WIDTH){
-            throw IllegalArgumentException("max value ($max_column) must be less than the size ($WIDTH)")
-            TODO("Fix the error message")
+        if (max_column>=WIDTH){
+            throw IllegalArgumentException("Max column ($max_column) must be less than the width ($WIDTH)")
+        }
+
+        if (max_row>=HEIGHT){
+            throw IllegalArgumentException("Max row ($max_row) must be less than the height ($HEIGHT)")
         }
 
         var num = 0
