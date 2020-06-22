@@ -5,6 +5,7 @@ import tiles.Water
 import java.io.File
 import kotlin.math.PI
 import kotlin.math.pow
+import kotlin.system.exitProcess
 
 class Main {
     companion object {
@@ -41,6 +42,13 @@ class Code(){
         clumper = SpiralClumper(water_prob * 1.2F, Ellipse(map.HEIGHT / 3, map.WIDTH / 4,
                 map.HEIGHT / 2, map.WIDTH / 2, (PI / 3F).toFloat()));
         val tidyier = Tidyier(Water(), Earth());
+
+        val t = RiverCheckSpeedCheck()
+
+        t.main();
+
+        exitProcess(-1);
+
 
         //Speed testing stuff hidden here
         {

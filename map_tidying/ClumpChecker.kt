@@ -23,7 +23,6 @@ class ClumpChecker (val map: WorldMap, val tile: Tile) {
         this.square_size = square_size
     }
 
-
     fun isTileLake(row: Int, column: Int): Boolean{
         val temp = listOf(row, column)
 
@@ -79,7 +78,7 @@ class ClumpChecker (val map: WorldMap, val tile: Tile) {
         return false
     }
 
-    private fun setTileLake(row: Int, column: Int){
+    fun setTileLake(row: Int, column: Int){
         val temp = listOf(row, column)
         lake_map[temp] = true
 
@@ -108,5 +107,9 @@ class ClumpChecker (val map: WorldMap, val tile: Tile) {
                 }
             }
         }
+    }
+
+    fun lakeMapValue(row: Int, column: Int): Boolean?{
+        return lake_map[listOf(row, column)]
     }
 }

@@ -229,4 +229,8 @@ class WorldMap(height: Int, width: Int, start_water_percentage: Float) {
     fun getArea(): Int{
         return HEIGHT*WIDTH
     }
+
+    fun copy(): WorldMap{
+        return WorldMap(this, 0, HEIGHT, 0, WIDTH)
+    }
 }

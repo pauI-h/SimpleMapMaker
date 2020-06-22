@@ -12,8 +12,8 @@ class RiverChecker(var search_up: Boolean, var tiles: WorldMap, var threaded: Bo
     var tile_thread_map: MutableMap<List<Int>, RiverChecker> = mutableMapOf()
     var is_interupted = false;
 
-    var row = tiles.getArea()/2
-    var column = tiles.getArea()/2
+    var row = tiles.HEIGHT/2
+    var column = tiles.WIDTH/2
 
 
     private constructor(search_up: Boolean, tiles: WorldMap, row: Int, column: Int,
@@ -27,6 +27,8 @@ class RiverChecker(var search_up: Boolean, var tiles: WorldMap, var threaded: Bo
 
     override fun run() {
         is_running = true
+        is_interupted = false
+        is_finished = false
         if (threaded) {
             if (search_up) {
                 is_river = searchUp(tiles, row, column)
@@ -82,9 +84,30 @@ class RiverChecker(var search_up: Boolean, var tiles: WorldMap, var threaded: Bo
                 }
             }
 
-            for (thread in threads) {
-                if (!thread.is_running && !thread.is_finished) {
-                    thread.start()
+
+            for (pos in threads.indices) {
+
+                var count = 0
+                while (true){
+                    var tried = false
+                    var thread = threads[pos]
+                    if (!thread.is_running && !thread.is_finished) {
+                        try {
+                            if (thread.is_interupted || thread.state == State.RUNNABLE){ //Reduces some exceptions
+                                thread.run()
+                                tried = true
+                                continue
+                            }
+                            thread.start()
+
+                            break
+                        } catch (ITSE: IllegalThreadStateException) {
+                            count++
+                            if (count>=5 || tried){
+                                println(thread.state)
+                            }
+                        }
+                    }
                 }
             }
 
